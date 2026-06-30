@@ -157,7 +157,7 @@
       }
 
       if (locatorType === "testid") {
-        return Array.from(document.querySelectorAll(`[data-testid="${cssEscape(locator)}"]`));
+        return Array.from(document.querySelectorAll(`[data-testid*="${cssEscape(locator)}"]`));
       }
 
       return Array.from(document.querySelectorAll(locator));

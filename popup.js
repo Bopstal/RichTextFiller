@@ -141,7 +141,7 @@ function getLocatorPlaceholder(type) {
   }
 
   if (type === "testid") {
-    return "first-name-input";
+    return "first-name";
   }
 
   return "input[name='firstName']";
