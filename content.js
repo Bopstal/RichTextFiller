@@ -12,6 +12,7 @@
   let options = { ...DEFAULT_OPTIONS };
   let pendingFill = 0;
   let pendingMutationFill = 0;
+  let fillCycleId = 0;
 
   loadOptions();
   observeDomChanges();
@@ -28,11 +29,11 @@
       )
     };
 
-    scheduleFill();
+    scheduleFill({ newCycle: true });
   });
 
   window.addEventListener("rtfiller:network-complete", () => {
-    scheduleFill();
+    scheduleFill({ newCycle: true });
   });
 
   function loadOptions() {
@@ -40,7 +41,7 @@
       options = normalizeOptions(storedOptions);
 
       if (options.fillExistingOnLoad) {
-        scheduleFill();
+        scheduleFill({ newCycle: true });
       }
     });
   }
@@ -69,9 +70,13 @@
     return normalizedOptions;
   }
 
-  function scheduleFill() {
+  function scheduleFill({ newCycle = false } = {}) {
     if (!options.enabled || getActiveLocators().length === 0) {
       return;
+    }
+
+    if (newCycle) {
+      fillCycleId += 1;
     }
 
     window.clearTimeout(pendingFill);
@@ -105,6 +110,10 @@
       }
 
       if (!options.overwriteFilled && getElementValue(element).trim()) {
+        continue;
+      }
+
+      if (options.overwriteFilled && element.dataset.rtfillerCycleId === String(fillCycleId)) {
         continue;
       }
 
@@ -229,6 +238,7 @@
       focusElement(element);
       selectElementContents(element);
       element.dataset.rtfillerFilled = "true";
+      element.dataset.rtfillerCycleId = String(fillCycleId);
       fillInputInMainWorld(element, text);
       return;
     }
@@ -236,6 +246,7 @@
     if (isEditable) {
       ensureElementId(element);
       element.dataset.rtfillerFilled = "true";
+      element.dataset.rtfillerCycleId = String(fillCycleId);
       fillInputInMainWorld(element, text);
     }
   }
