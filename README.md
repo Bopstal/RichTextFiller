@@ -15,9 +15,10 @@ It is built for iframe-heavy pages and modern frontend frameworks. The actual fi
 
 1. Click the RTFiller extension icon.
 2. Turn it on.
-3. Pick a locator type:
+3. Add one or more locators:
    - `CSS selector`, for example `input[name='firstName']`
    - `XPath`, for example `//input[@name='firstName']`
+   - `data-testid`, for example `first-name-input`
 4. Enter one word per line, or keep the included hipster-ish word database.
 
 When a page completes a network request, matching text inputs, textareas, and editable elements are filled with five random words from the list.
@@ -30,8 +31,7 @@ RTFiller does a short debounce before filling so network and DOM update bursts s
 
 ## Configuration
 
-- **Locator type**: choose CSS selector or XPath.
-- **Locator**: target the actual input, textarea, or contenteditable element when possible.
+- **Locators**: add multiple CSS, XPath, or `data-testid` locators. Target the actual input, textarea, or contenteditable element when possible.
 - **Word database**: one word per line. RTFiller randomly picks five words for each fill.
 - **Fill existing matches on page load**: fills matching empty fields when the frame loads, not only after later network requests.
 - **Overwrite filled fields**: when off, RTFiller leaves fields with existing text untouched. When on, matching fields are replaced.
@@ -43,6 +43,7 @@ input[name='firstName']
 textarea[data-testid='notes']
 [contenteditable='true']
 //input[@name='firstName']
+first-name-input
 ```
 
 ## Troubleshooting

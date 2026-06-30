@@ -1,8 +1,7 @@
 (function () {
   const DEFAULT_OPTIONS = {
     enabled: false,
-    locatorType: "css",
-    locator: "",
+    locators: [],
     texts: RTFILLER_WORD_BANK,
     wordBankVersion: 2,
     fillDelayMs: 100,
@@ -52,6 +51,10 @@
       ...storedOptions
     };
 
+    if (!Array.isArray(normalizedOptions.locators)) {
+      normalizedOptions.locators = normalizeLegacyLocator(storedOptions);
+    }
+
     if (storedOptions.wordBankVersion !== DEFAULT_OPTIONS.wordBankVersion) {
       normalizedOptions.texts = RTFILLER_WORD_BANK;
       normalizedOptions.wordBankVersion = DEFAULT_OPTIONS.wordBankVersion;
@@ -67,7 +70,7 @@
   }
 
   function scheduleFill() {
-    if (!options.enabled || !options.locator.trim()) {
+    if (!options.enabled || getActiveLocators().length === 0) {
       return;
     }
 
@@ -76,7 +79,7 @@
   }
 
   function scheduleMutationFill() {
-    if (!options.enabled || !options.locator.trim()) {
+    if (!options.enabled || getActiveLocators().length === 0) {
       return;
     }
 
@@ -94,7 +97,7 @@
   }
 
   function fillMatches() {
-    const elements = findElements(options.locatorType, options.locator);
+    const elements = findElementsForLocators(getActiveLocators());
 
     for (const element of elements) {
       if (!isVisible(element)) {
@@ -109,10 +112,52 @@
     }
   }
 
+  function getActiveLocators() {
+    return options.locators
+      .map((locator) => ({
+        type: locator.type || "css",
+        value: (locator.value || "").trim()
+      }))
+      .filter((locator) => locator.value);
+  }
+
+  function normalizeLegacyLocator(storedOptions) {
+    if (!storedOptions.locator || !storedOptions.locator.trim()) {
+      return [];
+    }
+
+    return [
+      {
+        type: storedOptions.locatorType || "css",
+        value: storedOptions.locator.trim()
+      }
+    ];
+  }
+
+  function findElementsForLocators(locators) {
+    const elements = [];
+    const seenElements = new Set();
+
+    for (const locator of locators) {
+      for (const element of findElements(locator.type, locator.value)) {
+        if (!seenElements.has(element)) {
+          seenElements.add(element);
+          elements.push(element);
+        }
+      }
+    }
+
+    return elements;
+  }
+
   function findElements(locatorType, locator) {
     try {
       if (locatorType === "xpath") {
         return findByXPath(locator);
+      }
+
+      if (locatorType === "testid") {
+        return Array.from(document.querySelectorAll(`[data-testid="${cssEscape(locator)}"]`));
       }
 
       return Array.from(document.querySelectorAll(locator));
@@ -120,6 +165,14 @@
       console.warn("[RTFiller] Invalid locator:", error);
       return [];
     }
+  }
+
+  function cssEscape(value) {
+    if (window.CSS && typeof window.CSS.escape === "function") {
+      return window.CSS.escape(value);
+    }
+
+    return value.replace(/["\\]/g, "\\$&");
   }
 
   function findByXPath(xpath) {

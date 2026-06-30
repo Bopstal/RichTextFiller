@@ -40,9 +40,16 @@ label {
   color: #364247;
 }
 
+h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 input,
 select,
-textarea {
+textarea,
+button {
   width: 100%;
   border: 1px solid #cfd9d5;
   border-radius: 6px;
@@ -54,8 +61,60 @@ textarea {
   font-weight: 500;
 }
 
+button {
+  cursor: pointer;
+}
+
 textarea {
   resize: vertical;
+}
+
+.locator-section {
+  display: grid;
+  gap: 8px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#addLocator {
+  width: auto;
+  padding: 7px 10px;
+  color: #ffffff;
+  background: #117865;
+  border-color: #117865;
+  font-weight: 700;
+}
+
+#locators {
+  display: grid;
+  gap: 8px;
+}
+
+.locator-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 34px;
+  gap: 6px;
+}
+
+.locator-row select,
+.locator-row input,
+.locator-row button {
+  min-width: 0;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: #7b242f;
+  background: #fff2f1;
+  border-color: #efc6c1;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .switch {
@@ -132,9 +191,21 @@ textarea {
 
   input,
   select,
-  textarea {
+  textarea,
+  button {
     border-color: #344541;
     color: #eef4f2;
     background: #182322;
+  }
+
+  #addLocator {
+    background: #117865;
+    border-color: #117865;
+  }
+
+  .icon-button {
+    color: #ffd3d0;
+    background: #3a1d20;
+    border-color: #684247;
   }
 }

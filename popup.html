@@ -16,18 +16,13 @@
         </label>
       </header>
 
-      <label>
-        Locator type
-        <select id="locatorType">
-          <option value="css">CSS selector</option>
-          <option value="xpath">XPath</option>
-        </select>
-      </label>
-
-      <label>
-        Locator
-        <input id="locator" type="text" placeholder="input[name='firstName']">
-      </label>
+      <section class="locator-section">
+        <div class="section-header">
+          <h2>Locators</h2>
+          <button id="addLocator" type="button">Add</button>
+        </div>
+        <div id="locators"></div>
+      </section>
 
       <label>
         Word database
