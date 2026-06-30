@@ -9,7 +9,7 @@ It is built for iframe-heavy pages and modern frontend frameworks. The actual fi
 1. Open `chrome://extensions`.
 2. Enable **Developer mode**.
 3. Click **Load unpacked**.
-4. Select this folder: `/Users/basvanopstal/Documents/RTFiller`.
+4. Select the folder where you cloned or downloaded this project.
 
 ## Use
 
