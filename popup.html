@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RTFiller</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>RTFiller</h1>
+        <label class="switch">
+          <input id="enabled" type="checkbox">
+          <span></span>
+        </label>
+      </header>
+
+      <label>
+        Locator type
+        <select id="locatorType">
+          <option value="css">CSS selector</option>
+          <option value="xpath">XPath</option>
+        </select>
+      </label>
+
+      <label>
+        Locator
+        <input id="locator" type="text" placeholder="input[name='firstName']">
+      </label>
+
+      <label>
+        Word database
+        <textarea id="texts" rows="9" placeholder="One word per line"></textarea>
+      </label>
+
+      <label class="checkbox">
+        <input id="fillExistingOnLoad" type="checkbox">
+        Fill existing matches on page load
+      </label>
+
+      <p id="status" role="status"></p>
+    </main>
+
+    <script src="word-bank.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
