@@ -6,6 +6,7 @@
     texts: RTFILLER_WORD_BANK,
     wordBankVersion: 2,
     fillDelayMs: 100,
+    overwriteFilled: false,
     fillExistingOnLoad: true
   };
 
@@ -100,7 +101,7 @@
         continue;
       }
 
-      if (element.dataset.rtfillerFilled === "true" && getElementValue(element).trim()) {
+      if (!options.overwriteFilled && getElementValue(element).trim()) {
         continue;
       }
 

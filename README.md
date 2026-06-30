@@ -32,6 +32,7 @@ RTFiller does a short debounce before filling so network and DOM update bursts s
 - **Locator**: target the actual input, textarea, or contenteditable element when possible.
 - **Word database**: one word per line. RTFiller randomly picks five words for each fill.
 - **Fill existing matches on page load**: fills matching empty fields when the frame loads, not only after later network requests.
+- **Overwrite filled fields**: when off, RTFiller leaves fields with existing text untouched. When on, matching fields are replaced.
 
 ## Example Locators
 

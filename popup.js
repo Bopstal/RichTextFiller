@@ -5,6 +5,7 @@ const DEFAULT_OPTIONS = {
   texts: RTFILLER_WORD_BANK,
   wordBankVersion: 2,
   fillDelayMs: 100,
+  overwriteFilled: false,
   fillExistingOnLoad: true
 };
 
@@ -14,6 +15,7 @@ const fields = {
   locator: document.querySelector("#locator"),
   texts: document.querySelector("#texts"),
   fillExistingOnLoad: document.querySelector("#fillExistingOnLoad"),
+  overwriteFilled: document.querySelector("#overwriteFilled"),
   status: document.querySelector("#status")
 };
 
@@ -24,7 +26,8 @@ for (const field of [
   fields.locatorType,
   fields.locator,
   fields.texts,
-  fields.fillExistingOnLoad
+  fields.fillExistingOnLoad,
+  fields.overwriteFilled
 ]) {
   field.addEventListener("input", saveOptions);
 }
@@ -38,6 +41,7 @@ function loadOptions() {
     fields.locator.value = options.locator;
     fields.texts.value = options.texts.join("\n");
     fields.fillExistingOnLoad.checked = options.fillExistingOnLoad;
+    fields.overwriteFilled.checked = options.overwriteFilled;
   });
 }
 
@@ -71,6 +75,7 @@ function saveOptions() {
       .map((text) => text.trim())
       .filter(Boolean),
     wordBankVersion: DEFAULT_OPTIONS.wordBankVersion,
+    overwriteFilled: fields.overwriteFilled.checked,
     fillExistingOnLoad: fields.fillExistingOnLoad.checked
   };
 
