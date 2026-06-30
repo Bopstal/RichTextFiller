@@ -48,7 +48,7 @@ textarea[data-testid='notes']
 - Refresh the target page after reloading the extension.
 - If the target is inside an iframe, inspect the iframe content and make sure the locator matches the input inside that frame.
 - If a custom input wrapper is selected, target the nested real `input`, `textarea`, or `contenteditable` element instead.
-- Chrome may show a debugger warning because RTFiller includes a debugger-based fallback for stubborn inputs.
+- RTFiller only needs the `storage` permission. It does not use Chrome debugger access.
 
 ## Notes
 
@@ -57,4 +57,4 @@ textarea[data-testid='notes']
 - It supports text-like `input` fields, `textarea`, and `contenteditable` elements.
 - It dispatches `input` and `change` events so React, Vue, Angular, and similar frameworks can usually detect the change.
 - If a field appears inside an iframe after the parent page finishes a request, DOM changes in the iframe are watched too.
-- For text inputs and textareas it uses Chrome's debugger API to send browser-level text input. Chrome will show a debugger-access warning while the extension is filling.
+- It fills in the page's main JavaScript world so modern frontend frameworks can recognize the value without debugger access.

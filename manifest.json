@@ -3,11 +3,8 @@
   "name": "RTFiller",
   "version": "1.0.0",
   "description": "Fills elements matching a configured locator with random text after network requests.",
-  "permissions": ["storage", "debugger"],
+  "permissions": ["storage"],
   "host_permissions": ["<all_urls>"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

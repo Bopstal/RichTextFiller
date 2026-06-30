@@ -195,12 +195,8 @@
     );
 
     window.setTimeout(() => {
-      if (getElementValue(element) !== text) {
-        fillInputWithDebugger(element, text);
-      } else {
-        dispatchGenericEvent(element, "change");
-        commitElement(element, text);
-      }
+      dispatchGenericEvent(element, "change");
+      commitElement(element, text);
     }, 150);
   }
 
@@ -210,65 +206,6 @@
     }
 
     return element.dataset.rtfillerId;
-  }
-
-  function fillInputWithDebugger(element, text) {
-    chrome.runtime.sendMessage(
-      {
-        type: "rtfiller:debugger-fill",
-        text,
-        point: getViewportPoint(element)
-      },
-      (response) => {
-        if (chrome.runtime.lastError || !response || !response.ok) {
-          fillInputLikeUser(element, text);
-        }
-
-        element.setAttribute("value", text);
-        setCaretAtEnd(element);
-        dispatchGenericEvent(element, "change");
-        dispatchKeyboardEvents(element, text);
-        commitElement(element, text);
-      }
-    );
-  }
-
-  function getViewportPoint(element) {
-    const rect = element.getBoundingClientRect();
-    let x = rect.left + rect.width / 2;
-    let y = rect.top + rect.height / 2;
-    let currentWindow = window;
-
-    while (currentWindow !== currentWindow.parent) {
-      try {
-        const frame = currentWindow.frameElement;
-        if (!frame) {
-          break;
-        }
-
-        const frameRect = frame.getBoundingClientRect();
-        x += frameRect.left;
-        y += frameRect.top;
-        currentWindow = currentWindow.parent;
-      } catch (error) {
-        break;
-      }
-    }
-
-    return { x, y };
-  }
-
-  function fillInputLikeUser(element, text) {
-    const previousValue = element.value;
-    selectElementContents(element);
-    dispatchInputLifecycleEvent(element, "beforeinput", text);
-
-    const inserted = document.execCommand && document.execCommand("insertText", false, text);
-
-    if (!inserted || element.value !== text) {
-      setTrackedNativeValue(element, text, previousValue);
-      dispatchInputLifecycleEvent(element, "input", text);
-    }
   }
 
   function selectElementContents(element) {
@@ -370,15 +307,6 @@
     );
   }
 
-  function setCaretAtEnd(element) {
-    if (typeof element.setSelectionRange !== "function") {
-      return;
-    }
-
-    const length = element.value.length;
-    element.setSelectionRange(length, length);
-  }
-
   function getElementValue(element) {
     const tagName = element.tagName.toLowerCase();
 
@@ -416,21 +344,6 @@
       "text",
       "url"
     ].includes(element.type);
-  }
-
-  function setTrackedNativeValue(element, value, previousValue) {
-    const prototype = Object.getPrototypeOf(element);
-    const descriptor = Object.getOwnPropertyDescriptor(prototype, "value");
-
-    if (descriptor && descriptor.set) {
-      descriptor.set.call(element, value);
-    } else {
-      element.value = value;
-    }
-
-    if (element._valueTracker && typeof element._valueTracker.setValue === "function") {
-      element._valueTracker.setValue(previousValue);
-    }
   }
 
   function observeDomChanges() {
