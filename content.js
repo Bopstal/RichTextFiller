@@ -166,7 +166,8 @@
       }
 
       if (locatorType === "testid") {
-        return Array.from(document.querySelectorAll(`[data-testid*="${cssEscape(locator)}"]`));
+        return Array.from(document.querySelectorAll("[data-testid]"))
+          .filter((element) => element.getAttribute("data-testid").includes(locator));
       }
 
       return Array.from(document.querySelectorAll(locator));
@@ -174,14 +175,6 @@
       console.warn("[RTFiller] Invalid locator:", error);
       return [];
     }
-  }
-
-  function cssEscape(value) {
-    if (window.CSS && typeof window.CSS.escape === "function") {
-      return window.CSS.escape(value);
-    }
-
-    return value.replace(/["\\]/g, "\\$&");
   }
 
   function findByXPath(xpath) {
