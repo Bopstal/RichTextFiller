@@ -22,6 +22,8 @@ It is built for iframe-heavy pages and modern frontend frameworks. The actual fi
 
 When a page completes a network request, matching text inputs, textareas, and editable elements are filled with five random words from the list.
 
+The toolbar icon is red when RTFiller is off and green when it is on.
+
 The bundled word database lives in `word-bank.js`.
 
 RTFiller does a short debounce before filling so network and DOM update bursts settle without adding a noticeable delay.
